@@ -28,11 +28,6 @@ export class ConnectFourScene extends Phaser.Scene {
         });
     }
 
-    public static getRandomInt(): number {
-        // TODO higher random number?
-        return Math.ceil(Math.random() * 10);
-    }
-
     public preload(): void {
         // const assetPath = 'https://www.kleemans.ch/static/island-sokoban/assets/';
         const assetPath = 'assets/';
@@ -55,9 +50,8 @@ export class ConnectFourScene extends Phaser.Scene {
             });
         }
 
-        // TODO init starting player
-        // this.nextPlayer = (Math.random() > 0.5 ? Player.human : Player.computer);
-        this.nextPlayer = Player.computer;
+        // init starting player
+        this.nextPlayer = (Math.random() > 0.5 ? Player.human : Player.computer);
 
         // init board
         for (let i = 0; i < this.rows; i++) {

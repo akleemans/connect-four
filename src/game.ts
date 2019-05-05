@@ -7,16 +7,12 @@ import {ConnectFourScene} from './connect-four.scene';
 const config: GameConfig = {
     width: 460,
     height: 420,
-    type: Phaser.WEBGL, // CANVAS | WEBGL
+    type: Phaser.AUTO, // CANVAS | WEBGL
     backgroundColor: '#fff',
     parent: 'game',
     scene: [
         ConnectFourScene,
     ],
-    scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-    },
 };
 
 export class Game extends Phaser.Game {

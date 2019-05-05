@@ -1,10 +1,8 @@
 import * as Long from 'long';
 import {Book} from './book';
-import {ConnectFourScene} from './connect-four.scene';
 
 export class ConnectFourSimulation {
     private static INT_MOD: number = 126;
-    private static AND_MOD: number = 2147483647;
     private book: number[] = Book.book;
     private bookIndex: number = 0;
 
@@ -124,18 +122,18 @@ export class ConnectFourSimulation {
             }
         }
         if (k3 > 0) {
-            return ai1[(ConnectFourScene.getRandomInt() & ConnectFourSimulation.AND_MOD) % k3];
+            return ai1[this.getRandomInt(k3)];
         }
         if (j3 === 0) {
             if (l3 === 0) {
                 return 0;
             } else {
-                return ai2[(ConnectFourScene.getRandomInt() & ConnectFourSimulation.AND_MOD) % l3];
+                return ai2[this.getRandomInt(l3)];
             }
         }
         let l: number;
         if ((l = this.transpose()) !== -128 && l >> 5 === -2) {
-            return ai[(ConnectFourScene.getRandomInt() & ConnectFourSimulation.AND_MOD) % j3];
+            return ai[this.getRandomInt(j3)];
         }
         const l4: number = this.posed;
         let j1: number;
@@ -170,7 +168,7 @@ export class ConnectFourSimulation {
         if (this.posed - l4 >= 1048576) {
             this.emptyTT();
         }
-        return ai[(ConnectFourScene.getRandomInt() & ConnectFourSimulation.AND_MOD) % j1];
+        return ai[this.getRandomInt(j1)];
     }
 
     private readBookstream(): number {
@@ -506,4 +504,6 @@ export class ConnectFourSimulation {
         }
         return j3;
     }
+
+    private getRandomInt = (max: number): number => Math.ceil(Math.random() * (max - 1));
 }
