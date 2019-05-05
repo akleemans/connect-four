@@ -1,10 +1,9 @@
 /* tslint:disable-next-line:no-reference */
-/// <reference path="./phaser.d.ts"/>
+/// <reference path="../node_modules/phaser3-docs/typescript/phaser.d.ts"/>
 
 import 'phaser';
 import {ConnectFourScene} from './connect-four.scene';
 
-// main game configuration
 const config: GameConfig = {
     width: 460,
     height: 420,
@@ -14,6 +13,10 @@ const config: GameConfig = {
     scene: [
         ConnectFourScene,
     ],
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
 };
 
 export class Game extends Phaser.Game {
@@ -22,7 +25,6 @@ export class Game extends Phaser.Game {
     }
 }
 
-// when the page is loaded, create our game instance
 window.onload = () => {
     const game = new Game(config);
 };

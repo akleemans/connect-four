@@ -17,7 +17,12 @@
     "no-bitwise": false,
     "no-conditional-assignment": false,
     "no-angle-bracket-type-assertion": false,
-    "member-ordering": [true, {"order": "fields-first"}]
+    "member-ordering": [
+      true,
+      {
+        "order": "fields-first"
+      }
+    ]
   },
   "rulesDirectory": []
 }

@@ -34,7 +34,7 @@ export class ConnectFourScene extends Phaser.Scene {
     }
 
     public preload(): void {
-        // https://www.kleemans.ch/static/connect-four/
+        // const assetPath = 'https://www.kleemans.ch/static/island-sokoban/assets/';
         const assetPath = 'assets/';
         this.load.image('bg', assetPath + 'img/bg.png');
         this.load.image('X', assetPath + 'img/blue.png');
@@ -75,22 +75,13 @@ export class ConnectFourScene extends Phaser.Scene {
         }
     }
 
-    private log(...args: any): void {
-        /* tslint:disable:no-console */
-        console.log(...args);
-    }
-
     private makePlayerMove(move: number): void {
-        console.log('Player tries to make move:', move);
         if (this.nextPlayer !== Player.human) {
-            console.log('blocked, computer still thinking!');
             return;
         }
 
         const row = this.makeMove(move, Player.human);
-        if (row === -1) {
-            console.log('invalid column, seems to be full!');
-        } else {
+        if (row !== -1) {
             this.nextPlayer = Player.computer;
             this.checkWinner(row, move);
             if (!this.finished) {
@@ -102,9 +93,9 @@ export class ConnectFourScene extends Phaser.Scene {
     private makeComputerMove(): void {
         const t1 = new Date();
         const move = this.c4.getBestMove() - 1;
-        console.log('getBestMove() returned:', move + 1);
         const t2 = new Date();
-        this.log('Found computer move:', move, 'in', Math.abs(t2.getTime() - t1.getTime()), 'ms');
+        /* tslint:disable-next-line:no-console */
+        console.log('Found computer move:', move, 'in', Math.abs(t2.getTime() - t1.getTime()), 'ms');
         const row = this.makeMove(move, Player.computer);
 
         this.nextPlayer = Player.human;
@@ -115,7 +106,6 @@ export class ConnectFourScene extends Phaser.Scene {
         this.winner = this.getWinner(row, col);
 
         if (this.winner !== null) {
-            console.log('Game finished, winner:', this.winner);
             this.finished = true;
         }
     }
@@ -238,15 +228,4 @@ export class ConnectFourScene extends Phaser.Scene {
         }
         return true;
     }
-
-    private printBoard(): void {
-        for (let i = this.rows - 1; i >= 0; i--) {
-            let s = '';
-            for (let j = 0; j < this.cols; j++) {
-                s += this.board[i][j];
-            }
-            this.log(s);
-        }
-    }
-
 }

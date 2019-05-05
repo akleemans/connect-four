@@ -2,10 +2,10 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {ConnectFourScene, Player} from './connect-four.scene';
 
 export class Disc extends Sprite {
-    private currentScene: ConnectFourScene;
-    private row: number;
-    private col: number;
-    private player: Player;
+    private readonly currentScene: ConnectFourScene;
+    private readonly row: number;
+    private readonly col: number;
+    private readonly player: Player;
 
     public constructor(scene: ConnectFourScene, row: number, col: number, x: number, y: number, player) {
         super(scene, x, y, player);
