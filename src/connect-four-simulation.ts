@@ -2,34 +2,34 @@ import * as Long from 'long';
 import {Book} from './book';
 
 export class ConnectFourSimulation {
-    private static INT_MOD: number = 126;
+
     private book: number[] = Book.book;
     private bookIndex: number = 0;
-
     private readOperations: number = 0;
     private bookInCalled: number = 0;
     private datasetCalled: number = 0;
     private hashCalled: number = 0;
-
     private buf5: number;
     private nrle: number;
-    private history: number[][] = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 4, 2, 1, 0, -1, 1, 3, 5, 7, 5, 3, 1,
-        -1, 2, 5, 8, 10, 8, 5, 2, -1, 2, 5, 8, 10, 8, 5, 2, -1, 1, 3, 5, 7, 5, 3, 1, -1, 0, 1, 2, 4, 2, 1, 0],
+    private readonly history: number[][] = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 4, 2, 1, 0, -1, 1, 3, 5, 7, 5,
+        3, 1, -1, 2, 5, 8, 10, 8, 5, 2, -1, 2, 5, 8, 10, 8, 5, 2, -1, 1, 3, 5, 7, 5, 3, 1, -1, 0, 1, 2, 4, 2, 1, 0],
         [-1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 4, 2, 1, 0, -1, 1, 3, 5, 7, 5, 3, 1, -1, 2, 5, 8, 10, 8, 5, 2,
             -1, 2, 5, 8, 10, 8, 5, 2, -1, 1, 3, 5, 7, 5, 3, 1, -1, 0, 1, 2, 4, 2, 1, 0]];
-    private ht: number[];
-    private he: number[];
     private stride: number;
     private htindex: number;
     private lock: number;
     private posed: number;
-    private colthr: number[];
-    private moves: number[];
     private plycnt: number;
-    private rows: number[];
-    private dias: number[];
-    private columns: number[];
-    private height: number[];
+
+    private readonly intMod: number = 126;
+    private readonly colthr: number[];
+    private readonly moves: number[];
+    private readonly ht: number[];
+    private readonly he: number[];
+    private readonly rows: number[];
+    private readonly dias: number[];
+    private readonly columns: number[];
+    private readonly height: number[];
 
     public constructor() {
         this.nrle = 0;
@@ -249,7 +249,7 @@ export class ConnectFourSimulation {
         this.htindex = l.modulo(1050011).or(0).toNumber();
 
         this.stride = 131072 + this.lock % 179;
-        if (this.lock < 0 && (this.stride += ConnectFourSimulation.INT_MOD) < 131072) {
+        if (this.lock < 0 && (this.stride += this.intMod) < 131072) {
             this.stride += 179;
         }
     }

@@ -12,13 +12,15 @@ export class ConnectFourScene extends Phaser.Scene {
     private board: Disc[][] = [];
     private empty = null;
     private finished = false;
+    private statusText: Phaser.GameObjects.Text;
+    private spinner: Phaser.GameObjects.Sprite;
 
     private nextPlayer: Player;
     private winner: Player;
     private c4: ConnectFourSimulation;
 
     private offsetX = 55;
-    private offsetY = 370;
+    private offsetY = 390;
     private spacingX = 58;
     private spacingY = 56;
 
@@ -35,20 +37,23 @@ export class ConnectFourScene extends Phaser.Scene {
         this.load.image('X', assetPath + 'img/blue.png');
         this.load.image('O', assetPath + 'img/red.png');
         this.load.image('arrow', assetPath + 'img/arrow.png');
+        this.load.image('spinner', assetPath + 'img/spinner.png');
     }
 
     public create(): void {
-        // bg
-        this.add.image(0, 50, 'bg').setOrigin(0, 0).setScale(0.4, 0.4);
+        // background, arrows
+        this.add.image(0, this.offsetY - 320, 'bg').setOrigin(0, 0).setScale(0.4, 0.4);
 
         for (let i = 0; i < 7; i++) {
-            this.add.sprite(this.offsetX + i * this.spacingX, 25, 'arrow').setOrigin(0.5, 0.5).setScale(0.1)
-                .setInteractive().on('pointerdown', () => {
+            this.add.sprite(this.offsetX + i * this.spacingX, this.offsetY - 345, 'arrow')
+                .setOrigin(0.5, 0.5).setScale(0.1).setInteractive().on('pointerdown', () => {
                 if (!this.finished) {
                     this.makePlayerMove(i);
                 }
             });
         }
+        this.statusText = this.add.text(230, 10, 'Initializing...', {font: '22px'}).setOrigin(0.5, 0.5).setTint(0x0);
+        this.spinner = this.add.sprite(320, 10, 'spinner').setScale(0.2, 0.2).setVisible(false);
 
         // init starting player
         this.nextPlayer = (Math.random() > 0.5 ? Player.human : Player.computer);
@@ -66,6 +71,15 @@ export class ConnectFourScene extends Phaser.Scene {
         this.c4 = new ConnectFourSimulation();
         if (this.nextPlayer === Player.computer) {
             this.makeComputerMove();
+        } else {
+            this.updateStatus('Your turn!');
+        }
+    }
+
+    public update(time: number, delta: number): void {
+        if (this.spinner.visible) {
+            const angle = this.spinner.angle;
+            this.spinner.setAngle(angle + 5);
         }
     }
 
@@ -79,6 +93,8 @@ export class ConnectFourScene extends Phaser.Scene {
             this.nextPlayer = Player.computer;
             this.checkWinner(row, move);
             if (!this.finished) {
+                this.updateStatus('Thinking...');
+                this.spinner.setVisible(true);
                 setTimeout(() => this.makeComputerMove(), 500);
             }
         }
@@ -92,15 +108,34 @@ export class ConnectFourScene extends Phaser.Scene {
         console.log('Found computer move:', move, 'in', Math.abs(t2.getTime() - t1.getTime()), 'ms');
         const row = this.makeMove(move, Player.computer);
 
+        // finished
+        this.spinner.setVisible(false);
         this.nextPlayer = Player.human;
+        this.updateStatus('Your turn!');
         this.checkWinner(row, move);
+    }
+
+    private updateStatus(text: string): void {
+        /* tslint:disable-next-line:no-console */
+        console.log('updating status:', text);
+        this.statusText.setText(text);
     }
 
     private checkWinner(row, col): void {
         this.winner = this.getWinner(row, col);
 
         if (this.winner !== null) {
+            if (this.winner === Player.human) {
+                this.updateStatus('Game finished, you won!');
+            } else {
+                this.updateStatus('Game finished, I won!');
+            }
             this.finished = true;
+        } else {
+            if (this.isBoardFull()) {
+                this.updateStatus('Game finished, nobody won.');
+                this.finished = true;
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import {ConnectFourScene} from './connect-four.scene';
 
 const config: GameConfig = {
     width: 460,
-    height: 420,
+    height: 440,
     type: Phaser.AUTO, // CANVAS | WEBGL
     backgroundColor: '#fff',
     parent: 'game',
