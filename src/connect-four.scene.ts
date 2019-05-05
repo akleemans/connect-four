@@ -7,11 +7,6 @@ export enum Player {
 }
 
 export class ConnectFourScene extends Phaser.Scene {
-    public static getRandomInt(): number {
-        // TODO higher random number?
-        return Math.ceil(Math.random() * 10);
-    }
-
     private cols = 7;
     private rows = 6;
     private board: Disc[][] = [];
@@ -27,10 +22,15 @@ export class ConnectFourScene extends Phaser.Scene {
     private spacingX = 58;
     private spacingY = 56;
 
-    constructor() {
+    public constructor() {
         super({
             key: 'MainScene',
         });
+    }
+
+    public static getRandomInt(): number {
+        // TODO higher random number?
+        return Math.ceil(Math.random() * 10);
     }
 
     public preload(): void {
@@ -49,7 +49,9 @@ export class ConnectFourScene extends Phaser.Scene {
         for (let i = 0; i < 7; i++) {
             this.add.sprite(this.offsetX + i * this.spacingX, 25, 'arrow').setOrigin(0.5, 0.5).setScale(0.1)
                 .setInteractive().on('pointerdown', () => {
-                this.makePlayerMove(i);
+                if (!this.finished) {
+                    this.makePlayerMove(i);
+                }
             });
         }
 

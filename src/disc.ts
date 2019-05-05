@@ -2,7 +2,6 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {ConnectFourScene, Player} from './connect-four.scene';
 
 export class Disc extends Sprite {
-
     private currentScene: ConnectFourScene;
     private row: number;
     private col: number;
@@ -10,7 +9,6 @@ export class Disc extends Sprite {
 
     public constructor(scene: ConnectFourScene, row: number, col: number, x: number, y: number, player) {
         super(scene, x, y, player);
-        console.log('inited new disc with x y sprite:', x, y, player);
         this.row = row;
         this.col = col;
         this.player = player;

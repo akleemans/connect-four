@@ -11,6 +11,7 @@
     "TypeScript"
   ],
   "devDependencies": {
+    "@types/long": "^4.0.0",
     "expose-loader": "0.7.5",
     "ts-loader": "5.3.0",
     "tslint": "^5.16.0",
@@ -20,6 +21,7 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
+    "long": "^4.0.0",
     "phaser": "3.16.2"
   },
   "scripts": {

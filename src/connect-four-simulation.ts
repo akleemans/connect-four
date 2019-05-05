@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+import * as Long from 'long';
 import {Book} from './book';
 import {ConnectFourScene} from './connect-four.scene';
 
@@ -6,8 +8,11 @@ export class ConnectFourSimulation {
     private static AND_MOD: number = 2147483647;
     private book: number[] = Book.book;
     private bookIndex: number = 0;
+
     private readOperations: number = 0;
     private bookInCalled: number = 0;
+    private datasetCalled: number = 0;
+    private hashCalled: number = 0;
 
     private buf5: number;
     private nrle: number;
@@ -29,7 +34,7 @@ export class ConnectFourSimulation {
     private columns: number[];
     private height: number[];
 
-    constructor() {
+    public constructor() {
         // should be 12054
         console.log('INT_MOD:', ConnectFourSimulation.INT_MOD);
         console.log('AND_MOD:', ConnectFourSimulation.AND_MOD);
@@ -125,8 +130,6 @@ export class ConnectFourSimulation {
         this.height = [0, 0, 0, 0, 0, 0, 0, 0];
         this.reset();
         this.dataset();
-        console.log('read operations:', this.readOperations);
-        console.log('bookInCalled:', this.bookInCalled);
     }
 
     public makeMove(i: number) {
@@ -264,21 +267,56 @@ export class ConnectFourSimulation {
             let byte0: number;
             let j: number;
             if ((j = (byte0 = this.he[i]) & 31) < 31) {
-                this.he[i] = (<number> (byte0 - (j >= 16 ? 4 : j)) | 0);
+                this.he[i] = (byte0 - (j >= 16 ? 4 : j)) | 0;
             }
         }
         this.posed = 0;
     }
 
     private hash() {
+        this.hashCalled++;
         const i: number = (this.columns[1] << 7 | this.columns[2]) << 7 | this.columns[3];
         const j: number = (this.columns[7] << 7 | this.columns[6]) << 7 | this.columns[5];
+
+        // long l = i <= j ? (long) (j << 7 | columns[4]) << 21 | (long) i : (long) (i << 7 | columns[4]) << 21
+        // | (long) j;
+        /*
         const l: number = i <= j ? (n => n < 0 ? Math.ceil(n) :
-            Math.floor(n))(<number> (j << 7 | this.columns[4])) << 21 | (n => n < 0 ? Math.ceil(n) :
-            Math.floor(n))(<number> i) : (n => n < 0 ? Math.ceil(n) : Math.floor(n))
-        (<number> (i << 7 | this.columns[4])) << 21 | (n => n < 0 ? Math.ceil(n) : Math.floor(n))(<number> j);
-        this.lock = (<number> (l >> 17) | 0);
-        this.htindex = (<number> (l % 1050011) | 0);
+            Math.floor(n))(j << 7 | this.columns[4]) << 21 | (n => n < 0 ? Math.ceil(n) :
+            Math.floor(n))(i) : (n => n < 0 ? Math.ceil(n) : Math.floor(n))
+        (i << 7 | this.columns[4]) << 21 | (n => n < 0 ? Math.ceil(n) : Math.floor(n))(j);
+         */
+
+        let l: Long;
+        if (i <= j) {
+            // l = j << 7;
+            l = new Long(j << 7);
+            // System.out.println("l1 = " + l);
+            // l = l | this.columns[4];
+            l = l.or(this.columns[4]);
+            // System.out.println("l2 = " + l);
+            // l = l << 21;
+            l = l.shiftLeft(21);
+            // System.out.println("l3 = " + l);
+            // l = l | i;
+            l = l.or(i);
+            // System.out.println("l4 = " + l);
+        } else {
+            // l = (i << 7);
+            l = new Long(i << 7);
+            // l = l | this.columns[4];
+            l = l.or(this.columns[4]);
+            // l = l << 21;
+            l = l.shiftLeft(21);
+            // l = l | j;
+            l = l.or(j);
+        }
+
+        // this.lock = (l >> 17) | 0;
+        this.lock = l.shiftRight(17).or(0).toNumber();
+        // this.htindex = (l % 1050011) | 0;
+        this.htindex = l.modulo(1050011).or(0).toNumber();
+
         this.stride = 131072 + this.lock % 179;
         if (this.lock < 0 && (this.stride += ConnectFourSimulation.INT_MOD) < 131072) {
             this.stride += 179;
@@ -308,7 +346,7 @@ export class ConnectFourSimulation {
         let l: number = this.htindex;
         for (let k: number = 0; k < 8; k++) {
             if (this.ht[l] === this.lock) {
-                this.he[l] = (<number> (i << 5 | j) | 0);
+                this.he[l] = (i << 5 | j) | 0;
                 return;
             }
             if ((l += this.stride) >= 1050011) {
@@ -332,7 +370,7 @@ export class ConnectFourSimulation {
         for (let l: number = 0; l < 8; l++) {
             if (j > (this.he[k] & 31)) {
                 this.ht[k] = this.lock;
-                this.he[k] = (<number> (i << 5 | j) | 0);
+                this.he[k] = (i << 5 | j) | 0;
                 return;
             }
             if ((k += this.stride) >= 1050011) {
@@ -362,6 +400,7 @@ export class ConnectFourSimulation {
     }
 
     private dataset(): number {
+        this.datasetCalled++;
         const i2: number = this.transpose();
         if (i2 !== -128) {
             return i2 >> 5;
