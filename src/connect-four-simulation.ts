@@ -1,4 +1,3 @@
-/* tslint:disable:no-console */
 import * as Long from 'long';
 import {Book} from './book';
 import {ConnectFourScene} from './connect-four.scene';
@@ -35,56 +34,13 @@ export class ConnectFourSimulation {
     private height: number[];
 
     public constructor() {
-        // should be 12054
-        console.log('INT_MOD:', ConnectFourSimulation.INT_MOD);
-        console.log('AND_MOD:', ConnectFourSimulation.AND_MOD);
-        console.log('book length:', this.book.length);
+        this.nrle = 0;
+        this.stride = 0;
+        this.htindex = 0;
+        this.lock = 0;
+        this.posed = 0;
+        this.plycnt = 0;
 
-        if (this.buf5 === undefined) {
-            this.buf5 = 0;
-        }
-        if (this.nrle === undefined) {
-            this.nrle = 0;
-        }
-        if (this.ht === undefined) {
-            this.ht = null;
-        }
-        if (this.he === undefined) {
-            this.he = null;
-        }
-        if (this.stride === undefined) {
-            this.stride = 0;
-        }
-        if (this.htindex === undefined) {
-            this.htindex = 0;
-        }
-        if (this.lock === undefined) {
-            this.lock = 0;
-        }
-        if (this.posed === undefined) {
-            this.posed = 0;
-        }
-        if (this.colthr === undefined) {
-            this.colthr = null;
-        }
-        if (this.moves === undefined) {
-            this.moves = null;
-        }
-        if (this.plycnt === undefined) {
-            this.plycnt = 0;
-        }
-        if (this.rows === undefined) {
-            this.rows = null;
-        }
-        if (this.dias === undefined) {
-            this.dias = null;
-        }
-        if (this.columns === undefined) {
-            this.columns = null;
-        }
-        if (this.height === undefined) {
-            this.height = null;
-        }
         this.colthr = (s => {
             const a = [];
             while (s-- > 0) {
@@ -278,43 +234,20 @@ export class ConnectFourSimulation {
         const i: number = (this.columns[1] << 7 | this.columns[2]) << 7 | this.columns[3];
         const j: number = (this.columns[7] << 7 | this.columns[6]) << 7 | this.columns[5];
 
-        // long l = i <= j ? (long) (j << 7 | columns[4]) << 21 | (long) i : (long) (i << 7 | columns[4]) << 21
-        // | (long) j;
-        /*
-        const l: number = i <= j ? (n => n < 0 ? Math.ceil(n) :
-            Math.floor(n))(j << 7 | this.columns[4]) << 21 | (n => n < 0 ? Math.ceil(n) :
-            Math.floor(n))(i) : (n => n < 0 ? Math.ceil(n) : Math.floor(n))
-        (i << 7 | this.columns[4]) << 21 | (n => n < 0 ? Math.ceil(n) : Math.floor(n))(j);
-         */
-
         let l: Long;
         if (i <= j) {
-            // l = j << 7;
             l = new Long(j << 7);
-            // System.out.println("l1 = " + l);
-            // l = l | this.columns[4];
             l = l.or(this.columns[4]);
-            // System.out.println("l2 = " + l);
-            // l = l << 21;
             l = l.shiftLeft(21);
-            // System.out.println("l3 = " + l);
-            // l = l | i;
             l = l.or(i);
-            // System.out.println("l4 = " + l);
         } else {
-            // l = (i << 7);
             l = new Long(i << 7);
-            // l = l | this.columns[4];
             l = l.or(this.columns[4]);
-            // l = l << 21;
             l = l.shiftLeft(21);
-            // l = l | j;
             l = l.or(j);
         }
 
-        // this.lock = (l >> 17) | 0;
         this.lock = l.shiftRight(17).or(0).toNumber();
-        // this.htindex = (l % 1050011) | 0;
         this.htindex = l.modulo(1050011).or(0).toNumber();
 
         this.stride = 131072 + this.lock % 179;
