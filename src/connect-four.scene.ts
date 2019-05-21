@@ -31,7 +31,7 @@ export class ConnectFourScene extends Phaser.Scene {
     }
 
     public preload(): void {
-        // const assetPath = 'https://www.kleemans.ch/static/island-sokoban/assets/';
+        // const assetPath = 'https://www.kleemans.ch/static/connect-four/assets/';
         const assetPath = 'assets/';
         this.load.image('bg', assetPath + 'img/bg.png');
         this.load.image('X', assetPath + 'img/blue.png');
