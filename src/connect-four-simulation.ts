@@ -1,3 +1,21 @@
+// Most of this class is transpiled from code I found years ago from the
+// John Tromp's excellent Connect 4 website (http://tromp.github.io/c4/c4.html).
+// Parts of it are equal to an early Fhourstones (Java) implementation
+// which can be found on Github (https://github.com/qu1j0t3/fhourstones).
+//
+// Original copyright notice:
+//
+// This software is copyright (c) 1996-2005 by
+//      John Tromp
+//      Insulindeweg 908
+//      1095 DX Amsterdam
+//      Netherlands
+// E-mail: john.tromp at gmail.com
+//
+// This notice must not be removed.
+// This software must not be sold for profit.
+// You may redistribute if your distributees have the
+// same rights and restrictions.
 import * as Long from 'long';
 import {Book} from './book';
 
