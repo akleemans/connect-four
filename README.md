@@ -1,5 +1,12 @@
 # connect-four
-Connect Four web game with Phaser
+Connect Four web game with Phaser.
+
+See [this blog post](https://www.kleemans.ch/connect-four) for more information.
+
+<p align="center">
+    <img src="https://github.com/akleemans/connect-four/blob/master/connect4.png" alt="connect four">
+</p>
+
 
 ## Install
 
