@@ -11,19 +11,19 @@
     "TypeScript"
   ],
   "devDependencies": {
-    "@types/long": "4.0.0",
-    "expose-loader": "0.7.5",
+    "@types/long": "^4.0.0",
+    "expose-loader": "^0.7.5",
     "phaser3-docs": "github:photonstorm/phaser3-docs",
-    "ts-loader": "5.3.0",
-    "tslint": "5.16.0",
-    "typescript": "3.4.5",
-    "webpack": "4.30.0",
-    "webpack-cli": "3.2.2",
-    "webpack-dev-server": "3.3.1"
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
-    "long": "4.0.0",
-    "phaser": "3.17.0"
+    "long": "^4.0.0",
+    "phaser": "^3.18.1"
   },
   "scripts": {
     "dev": "webpack --mode development && webpack-dev-server --mode development",
@@ -34,6 +34,5 @@
     "url": "git+https://github.com/akleemans/connect-four.git"
   },
   "author": "Adrianus Kleemans",
-  "license": "ISC",
   "homepage": "https://github.com/akleemans/connect-four#readme"
 }
